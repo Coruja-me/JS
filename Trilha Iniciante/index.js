@@ -1,1 +1,4 @@
-console.log("Hello World");
+function Start() {
+    console.log("Bem Vindo!")
+}
+Start()
