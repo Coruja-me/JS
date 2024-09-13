@@ -1,4 +1,40 @@
-const {select} = require('@inquirer/prompts')
+const {select, input, checkbox} = require('@inquirer/prompts')
+
+let metas = []
+
+async function Cadastrar(){
+    const meta = await input({message: "Digite a meta: "})
+
+    if(meta.length <= 3){
+        console.log("A meta não pode ser menor que 3 caracteres!")
+        return Cadastrar()
+    }
+    metas.push({
+        value: meta, checked: false
+    })
+}
+
+async function Listar() {
+    const resposta = await checkbox({
+        message: "Use as setas para mudar de meta, o espaço para marcar ou desmarcar e o Enter para finalizar",
+        choices: [...metas]
+    })
+
+    if(resposta.length == 0){
+        console.log("Nenhuma meta selecionada!")
+        return
+    }
+    metas.forEach((m) => {
+        m.checked = false
+    })
+    resposta.forEach((resposta) => {
+        const meta = metas.find((m) => {
+            return m.value == resposta
+        })
+        meta.checked = true
+    })
+    console.log("Meta(s) finalizada(s)!")
+}
 
 async function Start() {
     console.log("Bem Vindo!")
@@ -8,25 +44,25 @@ async function Start() {
             message: "Menu",
             choices: [
                 {
-                    name:"Cadastrar meta",
+                    name: "Cadastrar meta",
                     value: "cad"
                 },
                 {
-                    name:"Listar metas",
+                    name: "Listar metas",
                     value: "list"
                 },
                 {
-                    name:"Sair",
+                    name: "Sair",
                     value: "exit"
                 }
             ]
         })
         switch(opcao){
             case "cad":
-                console.log("Cadastro!")
+                await Cadastrar()
             break
             case "list":
-                console.log("Cadastro!")
+                await Listar()
             break
             case "exit":
                 console.log("Saindo!")
