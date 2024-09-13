@@ -36,6 +36,20 @@ async function Listar() {
     console.log("Meta(s) finalizada(s)!")
 }
 
+async function MetasFeitas() {
+    const feitas = metas.filter((meta) => {
+        return meta.checked
+    })
+    if(feitas.length == 0){
+        console.log("Não há metas realizadas!")
+        return
+    }
+    await select({
+        message: "Metas Concluídas:",
+        choices: [...feitas]
+    })
+}
+
 async function Start() {
     console.log("Bem Vindo!")
 
@@ -52,6 +66,10 @@ async function Start() {
                     value: "list"
                 },
                 {
+                    name: "Ver metas feitas",
+                    value: "done"
+                },
+                {
                     name: "Sair",
                     value: "exit"
                 }
@@ -63,6 +81,9 @@ async function Start() {
             break
             case "list":
                 await Listar()
+            break
+            case "done":
+                await MetasFeitas()
             break
             case "exit":
                 console.log("Saindo!")
