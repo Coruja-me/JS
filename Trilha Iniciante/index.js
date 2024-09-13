@@ -2,6 +2,8 @@ const {select, input, checkbox} = require('@inquirer/prompts')
 
 let metas = []
 
+let mensage = "Bem Vindo ao App de Metas!"
+
 async function Cadastrar(){
     const meta = await input({message: "Digite a meta: "})
 
@@ -12,6 +14,7 @@ async function Cadastrar(){
     metas.push({
         value: meta, checked: false
     })
+    mensage = "Meta cadastrada com sucesso!"
 }
 
 async function Listar() {
@@ -26,7 +29,7 @@ async function Listar() {
     })
 
     if(resposta.length == 0){
-        console.log("Nenhuma meta selecionada!")
+        mensage = "Nenhuma meta selecionada!"
         return
     }
     
@@ -36,7 +39,7 @@ async function Listar() {
         })
         meta.checked = true
     })
-    console.log("Meta(s) finalizada(s)!")
+    mensage = "Meta(s) finalizada(s)!"
 }
 
 async function MetasFeitas() {
@@ -58,7 +61,7 @@ async function MetasAbertas() {
         return !meta.checked
     })
     if(abertas.length == 0){
-        console.log("Não há metas abertas!")
+        mensage = "Não há metas abertas!"
         return
     }
     await select({
@@ -79,7 +82,7 @@ async function Deletar(){
     })
 
     if(deletar.length == 0){
-        console.log("Não há metas para apagar!")
+        mensage = "Não há metas para apagar!"
         return
     }
     deletar.forEach((item) => {
@@ -87,14 +90,24 @@ async function Deletar(){
             return meta.value != item
         })
     })
-    console.log("Meta(s) deletada(s)!")
+    mensage = "Meta(s) deletada(s)!"
 }
 
+const msg = () => {
+    
+    console.clear();
+
+    if(mensage != ""){
+        console.log(mensage)
+        console.log("")
+        mensage = ""
+    }
+}
 
 async function Start() {
-    console.log("Bem Vindo!")
 
     while(true){
+        msg()
         const opcao = await select({
             message: "Menu",
             choices: [
