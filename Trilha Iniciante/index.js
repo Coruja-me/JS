@@ -9,8 +9,8 @@ let mensage = "Bem Vindo ao App de Metas!"
 async function Cadastrar(){
     const meta = await input({message: "Digite a meta: "})
 
-    if(meta.length <= 3){
-        console.log("A meta não pode ser menor que 3 caracteres!")
+    if(meta.length == 0){
+        console.log("A meta não pode ser vazia!")
         return Cadastrar()
     }
     metas.push({
@@ -20,6 +20,11 @@ async function Cadastrar(){
 }
 
 async function Listar() {
+    if(metas.length == 0){
+        mensage = "Não há metas!"
+        return
+    }
+    
     const resposta = await checkbox({
         message: "Use as setas para mudar de meta, o espaço para marcar ou desmarcar e o Enter para finalizar",
         choices: [...metas],
@@ -45,6 +50,10 @@ async function Listar() {
 }
 
 async function MetasFeitas() {
+    if(metas.length == 0){
+        mensage = "Não há metas!"
+        return
+    }
     const feitas = metas.filter((meta) => {
         return meta.checked
     })
@@ -59,6 +68,10 @@ async function MetasFeitas() {
 }
 
 async function MetasAbertas() {
+    if(metas.length == 0){
+        mensage = "Não há metas!"
+        return
+    }
     const abertas = metas.filter((meta) => {
         return !meta.checked
     })
@@ -73,6 +86,10 @@ async function MetasAbertas() {
 }
 
 async function Deletar(){
+    if(metas.length == 0){
+        mensage = "Não há metas!"
+        return
+    }
     const metanaofeita = metas.map((meta) => {
         return {value: meta.value, checked: false}
     })
@@ -126,7 +143,7 @@ async function Start() {
     while(true){
         msg()
         await Save()
-        
+
         const opcao = await select({
             message: "Menu",
             choices: [
