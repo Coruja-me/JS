@@ -1,5 +1,7 @@
 const {select, input, checkbox} = require('@inquirer/prompts')
 
+const fs = require("fs").promises
+
 let metas = []
 
 let mensage = "Bem Vindo ao App de Metas!"
@@ -104,10 +106,27 @@ const msg = () => {
     }
 }
 
+async function Load() {
+    try{
+        const dados = await fs.readFile("metas.json", "utf-8")
+        metas = JSON.parse(dados)
+    }
+    catch(erro) {
+        metas = []
+    }
+}
+
+async function Save() {
+    await fs.writeFile("metas.json", JSON.stringify(metas, null, 2))
+}
+
 async function Start() {
+    await Load()
 
     while(true){
         msg()
+        await Save()
+        
         const opcao = await select({
             message: "Menu",
             choices: [
